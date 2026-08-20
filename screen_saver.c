@@ -1,16 +1,16 @@
 #include <asm-generic/ioctls.h>
 #include <bits/time.h>
 #include <signal.h>
+#include <stdatomic.h>
 #include <stddef.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <sys/ioctl.h>
-#include <stdio.h>
 #include <time.h>
 #include <unistd.h>
-#include <stdatomic.h>
 
 #define RAINDROP_MAX 4096
-#define RAINDROP_MAX_HEIGHT 8
+#define RAINDROP_MAX_HEIGHT 12
 #define DROP_SCREEN_CONCENTRATION 0.05f
 #define FPS 15
 #define ONE_FRAME_MICROS 1000000 / FPS
@@ -82,9 +82,8 @@ void display_drop(const struct rain_drop *drop, char *const displayBuffer,
 			*displayBufferPos += snprintf(
 				displayBuffer + *displayBufferPos,
 				DISPLAY_BUFFER_SIZE - *displayBufferPos,
-				"\033[%d;%dH\033[38;2;0;%d;%dm%c", drop->y - i,
-				drop->x, 255 - i * 26, 65 - i * 8,
-				random_character());
+				"\033[%d;%dH\033[38;2;0;%d;0m%c", drop->y - i,
+				drop->x, 255 - i * 20, random_character());
 	}
 
 	const int previous_pos = drop->y - RAINDROP_MAX_HEIGHT;
