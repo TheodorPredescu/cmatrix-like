@@ -37,8 +37,10 @@ unsigned short term_col;
 struct rain_drop dropsPool[RAINDROP_MAX];
 
 static atomic_int_fast16_t end_program = 1;
-void close_program()
+void close_program(int sig)
 {
+	(void)sig;
+
 	end_program = 0;
 }
 
@@ -52,8 +54,10 @@ void end_sequence(char *displayBuffer)
 	fflush(stdout);
 }
 
-void update_dimensions()
+void update_dimensions(int sig)
 {
+	(void)sig;
+
 	struct winsize ts;
 	ioctl(0, TIOCGWINSZ, &ts);
 
@@ -217,7 +221,7 @@ int main()
 
 	srand(time(NULL));
 
-	update_dimensions();
+	update_dimensions(0);
 
 	// save screen to alternate buffer and deactivate the cursor
 	printf("\033[?1049h\033[?25l");
